@@ -33,13 +33,16 @@ class Entity(object):
     def move_right(self):
         self._move((1,0))
 
-    def process(self):
-        # written for random movement
+    def update(self):
+    # written for random movement
         movement = [self.move_up, self.move_left, self.move_down,
                 self.move_right]
         from random import randint
         movement[randint(0,len(movement)-1)]()
-        print self.position
+
+    def __del__(self):
+        print self.mark + " died"
+
 
     @property
     def position(self):

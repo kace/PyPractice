@@ -30,7 +30,7 @@ class Game(object):
         '''
         self.running=True
 
-    def process(self):
+    def update(self):
         '''
         The main game loop. Runs simple decision logic for each entites and
         moves them accordingly. Checks for collision etc.
@@ -40,7 +40,8 @@ class Game(object):
             sleep(td.total_seconds())
         else:
             for entity in self.entities:
-                entity.process()
+                entity.update()
+            self.world_map.update(self.entities)
             self.next_frame = datetime.now() + \
                 timedelta(seconds=self.tick_seconds)
 
@@ -48,9 +49,9 @@ class Game(object):
         '''
         Displays the world. For first iteration this means printing the matrix.
         '''
-        from pprint import pprint
-        self.world_map.update(self.entities)
-        pprint(self.world_map.world_map)
+        for row in self.world_map.world_map:
+            print " ".join([str(i).rjust(4) for i in row])
+        print ""
 
     def quit(self):
         '''
@@ -58,15 +59,18 @@ class Game(object):
         pass
 
 def main():
-    pass
+    WIDTH=25
+    HEIGHT=10
+    TICK=.1
+    NUM_HEROES=10
+    NUM_ENEMIES=20
 
-if __name__ == "__main__":
-    WIDTH=5
-    HEIGHT=5
-    TICK=1
-    game=Game(WIDTH,HEIGHT,4,4,TICK)
+    game=Game(WIDTH,HEIGHT,NUM_HEROES,NUM_ENEMIES,TICK)
     game.start()
     while game.running:
-        game.process()
+        game.update()
         game.render()
     game.quit()
+
+if __name__ == "__main__":
+    main()
